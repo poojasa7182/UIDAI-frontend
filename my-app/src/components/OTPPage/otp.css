@@ -3,3 +3,11 @@
     width: 2em !important;
     font-size: 1em;
 }
+
+@media only screen and (max-width: 500px) {
+    .makeStyles-otp-2>input {
+        height: 1.5em !important;
+        width: 1.5em !important;
+        font-size: 1em;
+    }
+}
