@@ -1,42 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
-import LoginPage from "./components/LoginPage/login.js";
-import OTPPage from './components/OTPPage/otp'
-import React from 'react';
+import LoginPage from "./components/LoginPage/LoginPage.js";
+import OTPPage from "./components/OTPPage/otp";
+import Application from "./components/ApplicationPage/application.js";
+import React from "react";
 
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
   return (
     <Router>
-       <Route
+      <Route
         exact
         path="/"
         render={(props) => {
-          return (
-            <LoginPage
-              {...props}
-            />
-          );
+          return <LoginPage {...props} />;
         }}
-      /> 
+      />
       <Route
         exact
         path="/otp"
         render={(props) => {
-          return (
-            <OTPPage
-              {...props}
-            />
-          );
+          return <OTPPage {...props} />;
         }}
-      /> 
+      />
+      <Route
+        exact
+        path="/app"
+        render={(props) => {
+          return <Application {...props} />;
+        }}
+      />
     </Router>
   );
 }
