@@ -58,6 +58,7 @@ function Application(props) {
           alignItems: "center",
           border: "2px solid black",
           borderRadius: "4px",
+          marginTop:'2%'
         }}
       >
         <Container

@@ -6,11 +6,11 @@ const useStyles = makeStyles((theme) => {
   console.log("theme: ", theme);
   return {
     parent: {
-      height: "20vh",
-      border: "2px solid black",
+      height: "10vh",
     },
     image: {
-      height: "100%",
+      height: "200%",
+      maxHeight:'20vw'
     },
   };
 });
@@ -22,7 +22,7 @@ function HeaderLogin() {
       <Box component="div" height="100%">
         <img
           className={classes.image}
-          src="https://iconape.com/wp-content/png_logo_vector/aadhar-logo.png"
+          src="https://iisc.ac.in/wp-content/uploads/2020/08/IISc_Master_Seal_Black_Transparent.png"
         ></img>
       </Box>
     </div>

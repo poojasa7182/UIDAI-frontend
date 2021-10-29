@@ -11,19 +11,33 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import "./otp.css";
 const useStyles = makeStyles((theme) => ({
   parent: {
-    height: "100vh",
+    height: "90vh",
     // border: "2px solid black",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    background:
-      "transparent linear-gradient(180deg, #FF9933 0%, #FFFFFF 49%, #9FCF9A 100%, #138808 100%) 0% 0% no-repeat padding-box",
-  },
+    flexDirection: "column"
+    },
   otp: {
     width: "100%",
     // border:'2px solid black',
     justifyContent: "center",
   },
+  logo: {
+    width:'25%',
+    marginTop:'-90%',
+    marginLeft:'37.5%'
+  },
+  contain:{
+    background: 'rgba(255,255,255,0.4)',
+    backdropFilter: 'saturate(180%) blur(10px)',
+    // border:'10px solid black',
+    borderRadius:'50px',
+    paddingTop: '2.5%',
+    paddingBottom: '4%',
+    width: '40vw !important',
+    minWidth : 'fit-content !important'
+  }
 }));
 
 function OTP() {
@@ -41,7 +55,12 @@ function OTP() {
 
   return (
     <div className={classes.parent}>
-      <Container>
+      <Container className={classes.contain}>
+      <img
+          className={classes.logo}
+          src="https://iconape.com/wp-content/png_logo_vector/aadhar-logo.png"
+        ></img>
+        <br></br>
         <Box
           component="div"
           sx={{
@@ -64,6 +83,7 @@ function OTP() {
             OTP has been sent on on your registered aadhar mobile number
           </Typography>
         </Box>
+        <br></br>
         <Box
           component="form"
           autoComplete={false}
@@ -82,9 +102,10 @@ function OTP() {
             separator={<span> &nbsp; </span>}
             className={classes.otp}
           />
+          <br></br>
           <Button
             variant="contained"
-            style={{ backgroundColor: "#D32828" }}
+            style={{ backgroundColor: "#D32828", width:'50%'}}
             type="submit"
             sx={{ borderRadius: 28 }}
             onClick={(e) => {

@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import LoginPage from "./components/LoginPage/LoginPage.js";
-import OTPPage from "./components/OTPPage/otp";
+import OTPPage from "./components/OTPPage/OTPPage";
 import Application from "./components/ApplicationPage/application.js";
 import React from "react";
 
