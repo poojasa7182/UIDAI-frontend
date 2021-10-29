@@ -8,9 +8,10 @@ import {
 } from "react-router-dom";
 import LoginPage from "./components/LoginPage/LoginPage.js";
 import OTPPage from "./components/OTPPage/OTPPage";
-import Application from "./components/ApplicationPage/application.js";
+import ApplicationPage from "./components/ApplicationPage/ApplicationPage";
+import RequestPage from "./components/ClientRequestPage/RequestPage"
 import React from "react";
-
+import RequestsPage from './components/Requestspage/RequestsPage'
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
@@ -34,7 +35,21 @@ function App() {
         exact
         path="/app"
         render={(props) => {
-          return <Application {...props} />;
+          return <ApplicationPage {...props} />;
+        }}
+      />
+      <Route
+        exact
+        path="/req"
+        render={(props) => {
+          return <RequestPage {...props} />;
+        }}
+      />
+      <Route
+        exact
+        path="/reqs"
+        render={(props) => {
+          return <RequestsPage {...props} />;
         }}
       />
     </Router>

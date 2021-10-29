@@ -15,6 +15,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Divider from "@mui/material/Divider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { Badge } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   item: {
     minHeight: "100%",
@@ -41,23 +42,28 @@ const useStyles = makeStyles((theme) => ({
 
 function Application(props) {
   const classes = useStyles();
-  const user = "Paritosh Kabra";
-  const introducer = "Landlord singh";
-  const aadhar_me = "123443211234";
+  const [user,setUser] = React.useState("Paritosh Kabra");
+  const [introducer, setintroducer] = React.useState("Landlord singh");
+  const reqStatus  = 1;
+  const aadhar_me  = "123443211234";
   const aadhar_intro = "98766789876";
   const isActive = useMediaQuery("(max-width : 700px)");
   const address = [{ f: "val1" }, { f: "val2" }, { f: "val3" }, { f: "val4" }];
 
   return (
-    <Container sx={{ height: !isActive ? "100vh" : "auto" }}>
+    // sx={}
+    //{ height: !isActive ? "100vh" : "auto" }
+    <Container sx={{ height: !isActive ? "90vh" : "auto" }}>
       <Container
         sx={{
-          height: "50%",
+          // height: "50%",
+          // // width:"",
+          padding: '4rem',
           display: "flex",
           flexDirection: !isActive ? "row" : "column",
           alignItems: "center",
           border: "2px solid black",
-          borderRadius: "4px",
+          borderRadius: "40px",
           marginTop:'2%'
         }}
       >
@@ -73,7 +79,7 @@ function Application(props) {
             src="https://cdn.pixabay.com/photo/2021/09/27/14/39/paris-6661136__480.jpg"
             alt=""
             className={classes.image}
-            style={{ width: "auto", height: isActive ? "150px" : "" }}
+            style={{ width: isActive ? "100%" : "75%", height: isActive ? "150px" : "", marginBottom: isActive ? '10%':'' }}
           />
         </Container>
         <Container
@@ -176,59 +182,21 @@ function Application(props) {
         </Container>
       </Container>
       <br />
+      {/* <Badge badgeContent={100} color="secondary"> */}
       <Container
         sx={{
-          height: "50%",
+          padding: "4rem",
           display: "flex",
           flexDirection: !isActive ? "row" : "column",
           border: "2px solid black",
-          borderRadius: "4px",
+          borderRadius: "40px",
         }}
       >
         <Container
           className={classes.item}
           style={{ overflow: "auto", overflowX: "hidden" }}
         >
-          <Box sx={{ minWidth: 275 }}>
-            <div>
-              <Typography
-                sx={{ fontSize: 20, fontWeight: "bold" }}
-                color="text.secondary"
-                gutterBottom
-              >
-                Client Details
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{ fontSize: "18px", fontWeight: "bold" }}
-                component="span"
-              >
-                {user} <span style={{ fontSize: "24px" }}>|</span>{" "}
-                <span style={{ fontSize: "16px" }}>Aadhar:</span>
-              </Typography>
-              <Typography sx={{ ml: 0.5 }} component="span">
-                {aadhar_me}
-              </Typography>
-            </div>
-            <div style={{ marginTop: "10px" }}>
-              <Typography
-                variant="p"
-                sx={{ fontSize: "14px", fontWeight: "bold" }}
-              >
-                Original Address
-              </Typography>
-              <List dense={true}>
-                {address.map((field, index) => {
-                  return (
-                    <ListItem key={index.toString()} alignItems="flex-start">
-                      <ListItemText primary={field.f}></ListItemText>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </div>
-          </Box>
-          <Divider />
+     
           <Box sx={{ minWidth: 275 }}>
             <div>
               <Typography
@@ -243,15 +211,16 @@ function Application(props) {
                 sx={{ fontSize: "18px", fontWeight: "bold" }}
                 component="span"
               >
-                {user} <span style={{ fontSize: "24px" }}>|</span>{" "}
-                <span style={{ fontSize: "16px" }}>Aadhar:</span>
+                {(introducer!='')?(<span>{introducer} <span style={{ fontSize: "24px" }}><br></br></span>{" "}</span>):('')}
+                
+                <span style={{ fontSize: "16px" }}>Aadhar Number:</span>
               </Typography>
               <Typography sx={{ ml: 0.5 }} component="span">
                 {aadhar_me}
               </Typography>
             </div>
             <div style={{ marginTop: "10px" }}>
-              <Typography
+              {/* <Typography
                 variant="span"
                 sx={{ fontSize: "14px", fontWeight: "bold" }}
               >
@@ -259,7 +228,7 @@ function Application(props) {
               </Typography>
               <Typography component="span" sx={{ ml: 0.5, fontSize: "14px" }}>
                 5462325894
-              </Typography>
+              </Typography> */}
             </div>
           </Box>
         </Container>
@@ -293,28 +262,52 @@ function Application(props) {
                 width: "fit-content",
               }}
             >
-              <Button
+              {/* <Button
                 variant="outlined"
                 startIcon={<EditIcon />}
                 sx={{ mt: 1, borderRadius: 28 }}
                 fullWidth
               >
                 Edit Request
-              </Button>
-              <Button
+              </Button> */}
+              {/* <Button
                 variant="outlined"
-                color="secondary"
+                color="error"
                 startIcon={<DeleteIcon />}
-                sx={{ mt: 1, borderRadius: 28 }}
+                sx={{ mt: 1, color:'error' }}
                 fullWidth
               >
                 Delete Request
-              </Button>
+              </Button> */}
             </div>
           </Box>
         </Container>
+        <Container>
+          <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingTop: "10%",
+                width: "fit-content",
+              }}
+            >
+             <Button
+                variant="outlined"
+                color="error"
+                // startIcon={<DeleteIcon />}
+                sx={{ mt: 1, borderRadius: 2 }}
+                fullWidth
+              >
+                cancel Request
+              </Button>
+              </div>
+        </Container>
       </Container>
+      {/* </Badge> */}
     </Container>
+    
   );
 }
 
