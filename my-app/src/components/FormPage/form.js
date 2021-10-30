@@ -60,12 +60,14 @@ function Requests(props) {
                 label="House Number/Location"
                 defaultValue={address.house}
                 value={house}
+                sx={{zIndex:'-1'}}
                 onChange={(e)=>setHouse(e.target.value)}
             />
             <br></br>
             <TextField
                 id="outlined-read-only-input"
                 label="Street"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.street}
                 value={street}
                 onChange={(e)=>setStreet(e.target.value)}
@@ -74,6 +76,7 @@ function Requests(props) {
             <TextField
                 id="outlined-read-only-input"
                 label="Landmark"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.landmark}
                 value={loc}
                 onChange={(e)=>setLoc(e.target.value)}
@@ -82,6 +85,7 @@ function Requests(props) {
             <TextField
                 id="outlined-read-only-input"
                 label="Location"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.loc}
                 InputProps={{
                     readOnly: true,
@@ -92,6 +96,7 @@ function Requests(props) {
                 id="outlined-read-only-input"
                 label="Village / Town / City"
                 defaultValue={address.vtc}
+                sx={{zIndex:'-1'}}
                 InputProps={{
                     readOnly: true,
                 }}
@@ -100,6 +105,7 @@ function Requests(props) {
             <TextField
                 id="outlined-read-only-input"
                 label="Post Office"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.po}
                 InputProps={{
                     readOnly: true,
@@ -109,6 +115,7 @@ function Requests(props) {
             <TextField
                 id="outlined-read-only-input"
                 label=" Sub District"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.subDist}
                 InputProps={{
                     readOnly: true,
@@ -118,6 +125,7 @@ function Requests(props) {
             <TextField
                 id="outlined-read-only-input"
                 label="District"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.dist}
                 InputProps={{
                     readOnly: true,
@@ -127,6 +135,7 @@ function Requests(props) {
             <TextField
                 id="outlined-read-only-input"
                 label="Pin Code"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.pc}
                 InputProps={{
                     readOnly: true,
@@ -136,6 +145,7 @@ function Requests(props) {
              <TextField
                 id="outlined-read-only-input"
                 label="State"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.state}
                 InputProps={{
                     readOnly: true,
@@ -145,6 +155,7 @@ function Requests(props) {
             <TextField
                 id="outlined-read-only-input"
                 label="Country"
+                sx={{zIndex:'-1'}}
                 defaultValue={address.country}
                 InputProps={{
                     readOnly: true,
