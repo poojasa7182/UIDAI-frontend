@@ -5,6 +5,7 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
+import axios from 'axios'
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const useStyles = makeStyles((theme) => {
@@ -22,19 +23,19 @@ const useStyles = makeStyles((theme) => {
       maxWidth: "100%",
     },
     logo: {
-      width:'25%',
-      marginTop:'-90%',
-      marginLeft:'37.5%'
+      width: '25%',
+      marginTop: '-90%',
+      marginLeft: '37.5%'
     },
-    contain:{
+    contain: {
       background: 'rgba(255,255,255,0.4)',
       backdropFilter: 'saturate(180%) blur(10px)',
       // border:'10px solid black',
-      borderRadius:'50px',
+      borderRadius: '50px',
       paddingTop: '2.5%',
       paddingBottom: '4%',
       width: '50vw !important',
-      minWidth : 'fit-content !important',
+      minWidth: 'fit-content !important',
     }
   };
 });
@@ -46,29 +47,40 @@ function Login() {
   const [errorAadhar, setErrorAAdhar] = React.useState(false)
   const [captchaVal, setCaptchaVal] = React.useState('');
   const isactive = useMediaQuery("(max-width : 500px)");
+  const [base64Icon, setbase64Icon] = React.useState('')
+  const [captchaTrxn, setcaptchaTrxn] = React.useState(null)
   let width = "40vw";
   let halfWidth = "20vw";
+
+  const apiurl = 'http://localhost:8000/uidai/capcha/'
+  React.useEffect(() => {
+    axios.get(apiurl)
+      .then(res => {
+        setbase64Icon(`data:image/png;base64,${res.data.image}`)
+        setcaptchaTrxn(res.data.trxnId)
+      })
+  }, [])
 
   const handleLogin = (e) => {
     e.preventDefault();
   };
 
-  const handleAadharChange = (e) =>{
+  const handleAadharChange = (e) => {
     setAadharNum(e.target.value)
   }
 
-  const handleCaptchaChange = (e) =>{
+  const handleCaptchaChange = (e) => {
     setCaptchaVal(e.target.value)
   }
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => { }, []);
   if (isactive) {
     width = "80vw";
     halfWidth = "40vw";
   }
   return (
     <div className={classes.parent}>
-      
+
       <Container className={classes.contain}>
         <img
           className={classes.logo}
@@ -110,10 +122,11 @@ function Login() {
             id="outlined-basic"
             label="Aadhar Number"
             variant="outlined"
-            value = {aadharNumber}
-            onChange = {(e)=>handleAadharChange(e)}
+            value={aadharNumber}
+            onChange={(e) => handleAadharChange(e)}
             error={errorAadhar}
           ></TextField>
+          {console.log(captchaTrxn)}
           <Box
             component="div"
             sx={{
@@ -128,16 +141,16 @@ function Login() {
               label="Captcha"
               variant="outlined"
               sx={{ width: { halfWidth } }}
-              value = {captchaVal}
-              onChange = {(e) => handleCaptchaChange(e)}
+              value={captchaVal}
+              onChange={(e) => handleCaptchaChange(e)}
             ></TextField>
             <Box component="div" height={53} width={halfWidth}>
-              <img src={captcha} alt="not loaded" className={classes.image} />
+              <img style={{ width: 160, height: 50 }} src={base64Icon} />
             </Box>
           </Box>
           <Button
             variant="contained"
-            style={{ backgroundColor: "#D32828" , maxWidth:'50%', padding:'1.5%'}}
+            style={{ backgroundColor: "#D32828", maxWidth: '50%', padding: '1.5%' }}
             type="submit"
             sx={{ borderRadius: 28 }}
             onClick={handleLogin}
