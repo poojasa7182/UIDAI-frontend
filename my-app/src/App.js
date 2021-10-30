@@ -12,6 +12,8 @@ import ApplicationPage from "./components/ApplicationPage/ApplicationPage";
 import RequestPage from "./components/ClientRequestPage/RequestPage"
 import React from "react";
 import RequestsPage from './components/Requestspage/RequestsPage'
+import VerifyReq from './components/VerifyRequests/VerifyReqPage'
+
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
 
@@ -50,6 +52,13 @@ function App() {
         path="/reqs"
         render={(props) => {
           return <RequestsPage {...props} />;
+        }}
+      />
+      <Route
+        exact
+        path="/reqs/:id"
+        render={(props) => {
+          return <VerifyReq {...props} />;
         }}
       />
     </Router>

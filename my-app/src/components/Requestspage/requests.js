@@ -31,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
         padding:'1%',
         display:'flex',
         flexDirection:'column'
+    },
+    buttons:{
+        display:'flex',
+        justifyContent:'space-evenly'
     }
     
 }));
@@ -42,28 +46,12 @@ function Requests(props) {
         {
             name:'Pooja Allampallewar',
             aadharNo:'567572542338',
-            dist:'dfd',
-            house:'dd',
-            loc:'wewe',
-            pc:'fesfe',
-            po:'dfsd',
-            state:'ddsds',
-            street:'dsd',
-            subDist:'sas',
-            vtc:'dcsdwsd',
+            
         },
         {
             name:'dfede',
             aadharNo:'dsds',
-            dist:'dfd',
-            house:'dd',
-            loc:'wewe',
-            pc:'fesfe',
-            po:'dfsd',
-            state:'ddsds',
-            street:'dsd',
-            subDist:'sas',
-            vtc:'dcsdwsd',
+            
         },
       ]
     const isActive = useMediaQuery("(max-width : 700px)");
@@ -118,33 +106,8 @@ function Requests(props) {
                                 </Typography>
                                 </div>
                                 {isActive?(''):(<br></br>)}
-                                <Typography
-                                    variant="p"
-                                    sx={{
-                                    fontSize: "1.2em",
-                                    fontWeight:'500'
-                                    }}
-                                >
-                                Original Address
-                                </Typography>
-                                <br></br>
-                                <Typography
-                                    variant="p"
-                                    sx={{
-                                    fontSize: "1.2em",
-                                    }}
-                                >
-                                {client.dist},
-                                {client.house},
-                                {client.loc},
-                                {client.pc},
-                                {client.po},
-                                <br></br>
-                                {client.state},
-                                {client.street},
-                                {client.subDist},
-                                {client.vtc}
-                                </Typography>
+                    
+                               
                                
                             </Box>
                             {isActive?(<Divider></Divider>):(<Divider orientation="vertical" flexItem />)}
@@ -155,6 +118,7 @@ function Requests(props) {
                                     sx={{
                                     fontSize: "1.5em",
                                     fontWeight: "bold",
+                                    marginBottom:'2%'
                                     }}
                                 >
                                 Status
@@ -168,14 +132,28 @@ function Requests(props) {
                                     Waiting for your response
                                 </Typography>
                                 <br></br>
+                                <br></br>
+                                <div className={classes.buttons}>
+                                <Button
+                                    variant="outlined"
+                                    color='error'
+                                    style={{ maxWidth:'75%', padding:'1.5% 3%', color:'red'}}
+                                    type="submit"
+                                    sx={{ borderRadius: 28, alignSelf:'center', justifySelf:'center',textAlign:'center' }}
+                                >
+                                Cancel request
+                                </Button>
+                                {isActive?(<div>&nbsp;</div>):('')}
                                 <Button
                                     variant="outlined"
                                     style={{ maxWidth:'75%', padding:'1.5% 3%'}}
                                     type="submit"
-                                    sx={{ borderRadius: 28, alignSelf:'center', justifySelf:'center' }}
+                                    href='./req'
+                                    sx={{ borderRadius: 28, alignSelf:'center', justifySelf:'center',textAlign:'center' }}
                                 >
                                 Respond to request
                                 </Button>
+                                </div>
                             </Box>
                             {isActive?(<br></br>):('')}
                         </Container>
