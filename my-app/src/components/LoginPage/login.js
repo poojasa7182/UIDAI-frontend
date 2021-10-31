@@ -3,6 +3,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import ReplayIcon from "@mui/icons-material/Replay";
@@ -58,10 +61,37 @@ function Login(props) {
   const isactive = useMediaQuery("(max-width : 500px)");
   const [base64Icon, setbase64Icon] = React.useState("");
   const [captchaTrxn, setcaptchaTrxn] = React.useState(null);
+  const [open, setopen] = React.useState(false)
   const Aadhar_Regex = new RegExp("^[1-9]{1}[0-9]{11}$");
   const history = useHistory();
   let width = "40vw";
   let halfWidth = "20vw";
+
+
+
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setopen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+
+
 
   const captchaGen = "http://localhost:8000/uidai/capcha/";
   const otpGen = "http://localhost:8000/uidai/otp/";
@@ -94,17 +124,19 @@ function Login(props) {
               setError(res.data.message);
               setCaptchaVal("");
               captcha();
-              document.getElementById("invalid").style.display = "inline";
+              setopen(true)
             }
           })
           .catch((e) => {
             setCaptchaVal("");
             captcha();
-            document.getElementById("invalid").style.display = "inline";
+            setopen(true)
           });
       } else {
         setErrorAAdhar(true);
         setErrorCaptcha(true);
+        setError("Enter correct details in all fields")
+        setopen(true)
       }
     }
   };
@@ -123,7 +155,7 @@ function Login(props) {
     }
   };
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => { }, []);
   if (isactive) {
     width = "80vw";
     halfWidth = "40vw";
@@ -136,7 +168,6 @@ function Login(props) {
           src="https://iconape.com/wp-content/png_logo_vector/aadhar-logo.png"
         ></img>
         <br></br>
-        {console.log(props.otp)}
         <Box
           component="div"
           style={{
@@ -175,6 +206,7 @@ function Login(props) {
             value={aadharNumber}
             onChange={(e) => handleAadharChange(e)}
             error={errorAadhar}
+            helperText={errorAadhar ? "Enter a valid Aadhar Number" : ""}
           ></TextField>
           <Box
             component="div"
@@ -226,7 +258,7 @@ function Login(props) {
           >
             Generate OTP
           </Button>
-          <Typography
+          {/* <Typography
             component="p"
             id="invalid"
             variant="p"
@@ -241,9 +273,17 @@ function Login(props) {
             }}
           >
             {error}
-          </Typography>
+          </Typography> */}
+
         </Box>
       </Container>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={error}
+        action={action}
+      />
     </div>
   );
 }
