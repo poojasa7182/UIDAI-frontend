@@ -41,12 +41,11 @@ function Requests(props) {
     const [house, setHouse] = React.useState(address.house)
     const isActive = useMediaQuery("(max-width : 700px)");
 
-    return ( <
-        Container className = { classes.containerReq }
+    return ( 
+        <Container className = { classes.containerReq }
         sx = {
             { height: !isActive ? "90vh" : "auto" } } >
-        <
-        Typography variant = "p"
+        <Typography variant = "p"
         sx = {
             {
                 fontSize: "1.5em",
@@ -55,157 +54,119 @@ function Requests(props) {
                 textAlign: isActive ? "justify !important" : "center",
             }
         } >
-        Address Form <
-        /Typography> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        Address Form </Typography> <br/>
+        <TextField 
         label = "House Number/Location"
         defaultValue = { address.house }
         value = { house }
-        sx = {
-            { zIndex: '-1' } }
-        onChange = {
-            (e) => setHouse(e.target.value) }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        sx = {{ zIndex: isActive?'-1':'' } }
+        onChange = {(e) => setHouse(e.target.value) }
+        /> <br/>
+        <TextField 
         label = "Street"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.street }
         value = { street }
         onChange = {
             (e) => setStreet(e.target.value) }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br/>
+        <TextField 
         label = "Landmark"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.landmark }
         value = { loc }
         onChange = {
             (e) => setLoc(e.target.value) }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br/>
+        <TextField 
         label = "Location"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.loc }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br></br>
+        <TextField 
         label = "Village / Town / City"
         defaultValue = { address.vtc }
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br/>
+        <TextField 
         label = "Post Office"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.po }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br></br>
+        <TextField 
         label = " Sub District"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.subDist }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br></br>
+        <TextField 
         label = "District"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.dist }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br></br>
+        <TextField 
         label = "Pin Code"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.pc }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br></br>
+        <TextField
         label = "State"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.state }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        TextField id = "outlined-read-only-input"
+        /> <br></br>
+        <TextField 
         label = "Country"
-        sx = {
-            { zIndex: '-1' } }
+        sx = {{ zIndex: isActive?'-1':'' } }
         defaultValue = { address.country }
         InputProps = {
             {
                 readOnly: true,
             }
         }
-        /> <
-        br / >
-        <
-        Button variant = "contained"
+        /><br></br>
+        <Button variant = "contained"
         color = "success"
         style = {
             { maxWidth: '75%', padding: '1.5% 3%' } }
         type = "submit"
         sx = {
             { borderRadius: 28, alignSelf: 'center' } } >
-        Submit address details <
-        /Button> <
-        /Container>
+        Submit address details 
+        </Button> </Container>
 
     );
 }
