@@ -52,9 +52,10 @@ const useStyles = makeStyles((theme) => ({
 function Application(props) {
   const classes = useStyles();
   const [user, setUser] = React.useState(null);
-  const [introducer, setIntroducer] = React.useState(null);
-  const [status, setStatus] = React.useState(null);
-  const [requestId, setRequestId] = React.useState(-1);
+  const [request, setRequest] = React.useState(null);
+  // const [introducer, setIntroducer] = React.useState(null);
+  // const [status, setStatus] = React.useState(null);
+  // const [requestId, setRequestId] = React.useState(-1);
   const [open, setOpen] = React.useState(false);
   const reqStatus = 1;
   const isActive = useMediaQuery("(max-width : 700px)");
@@ -98,9 +99,7 @@ function Application(props) {
       )
       .then((res) => {
         console.log("request_sent: ", res.data["request_client"][0]);
-        setIntroducer(res.data["request_client"][0]["introducer"]);
-        setStatus(res.data["request_client"][0]["status"]);
-        setRequestId(res.data["request_client"][0]["id"]);
+        setRequest(res.data["request_client"][0]);
       })
       .catch((err) => {
         console.log(err);
@@ -108,7 +107,7 @@ function Application(props) {
   };
   const deleteRequest = () => {
     axios
-      .delete("http://127.0.0.1:8000/uidai/sent/" + requestId + "/", {
+      .delete("http://127.0.0.1:8000/uidai/sent/" + request.id + "/", {
         headers: {
           Authorization: `Token ${sessionStorage.getItem("token")}`,
         },
@@ -116,7 +115,7 @@ function Application(props) {
       .then((res) => {
         console.log("Request deleted successfully!!");
         getRequest();
-        setStatus(null);
+        setRequest(null);
         handleClose();
       })
       .catch((err) => {
@@ -266,7 +265,8 @@ function Application(props) {
         </Container>
         <br />
         {/* <Badge badgeContent={100} color="secondary"> */}
-        {status === "empty" || status === "success" ? (
+        {request != null &&
+        (request.status === "empty" || request.status === "success") ? (
           <Container
             sx={{
               padding: "4rem",
@@ -294,9 +294,9 @@ function Application(props) {
                     sx={{ fontSize: "18px", fontWeight: "bold" }}
                     component="span"
                   >
-                    {introducer !== null ? (
+                    {request !== null ? (
                       <span>
-                        {introducer.name}
+                        {request.introducer_name}
                         <span style={{ fontSize: "24px" }}>
                           <br />
                         </span>
@@ -308,7 +308,7 @@ function Application(props) {
                     <span style={{ fontSize: "16px" }}>Aadhar Number:</span>
                   </Typography>
                   <Typography sx={{ ml: 0.5 }} component="span">
-                    {introducer.username}
+                    {request.introducer_aadhar}
                   </Typography>
                 </div>
                 <div style={{ marginTop: "10px" }}>
@@ -344,7 +344,7 @@ function Application(props) {
                     sx={{ fontSize: 16, fontWeight: "500" }}
                     gutterBottom
                   >
-                    {status === "success" ? (
+                    {request.status === "success" ? (
                       <Typography
                         variant="h1"
                         style={{
@@ -401,7 +401,7 @@ function Application(props) {
                   width: "fit-content",
                 }}
               >
-                {status === "empty" ? (
+                {request.status === "empty" ? (
                   <Button
                     variant="outlined"
                     color="error"
@@ -436,10 +436,19 @@ function Application(props) {
         ) : (
           <Typography
             variant="h1"
-            style={{ color: "green", fontSize: "16px", textAlign: "center" }}
+            style={{
+              color:
+                request != null && request.status === "declined"
+                  ? "red"
+                  : "green",
+              fontSize: "16px",
+              textAlign: "center",
+            }}
           >
-            You have no pending request! Create a new request for address
-            update.
+            {request != null && request.status === "declined"
+              ? "Your request was declined!"
+              : "You have no pending request"}
+            ! Create a new request for address update.
           </Typography>
         )}
         <Dialog

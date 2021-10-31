@@ -15,6 +15,7 @@ import Link from "@mui/material/Link";
 
 import { Divider, Tab } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import axios from "axios";
 
 const AntTab = styled((props) => <Tab disableRipple {...props} />)(
   ({ theme }) => ({
@@ -107,9 +108,9 @@ const useStyles = makeStyles((theme) => {
       width: "100%",
       alignSelf: "center",
     },
-    popup:{
-      zIndex:'1'
-    }
+    popup: {
+      zIndex: "1",
+    },
   };
 });
 
@@ -117,6 +118,7 @@ function HeaderApp(props) {
   const classes = useStyles();
   const isActive = useMediaQuery("(max-width : 700px)");
   const [open, setOpen] = React.useState(false);
+  const [pendingRequest, setPendingRequest] = React.useState(false);
   const anchorRef = React.useRef(null);
 
   const handleToggle = () => {
@@ -148,7 +150,21 @@ function HeaderApp(props) {
     }
 
     prevOpen.current = open;
+    checkPRAndLastModifiedStatus();
   }, [open]);
+
+  const checkPRAndLastModifiedStatus = () => {
+    axios
+      .get("http://127.0.0.1:8000/uidai/pending", {
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setPendingRequest(res.data["pending_status"]);
+      });
+  };
   return (
     <div className={classes.parent}>
       <Box className={classes.box1} component="div" height="100%">
@@ -198,10 +214,10 @@ function HeaderApp(props) {
                           : "left bottom",
                     }}
                   >
-                    <Paper sx={{zIndex:'100'}}>
+                    <Paper sx={{ zIndex: "100" }}>
                       <ClickAwayListener onClickAway={handleClose}>
                         <MenuList
-                          sx={{zIndex:'100'}}
+                          sx={{ zIndex: "100" }}
                           autoFocusItem={open}
                           id="composition-menu"
                           aria-labelledby="composition-button"
@@ -268,15 +284,16 @@ function HeaderApp(props) {
                 props.history.push("/req");
               }}
             />
-            <Link
-              as={AntTab}
-              label="View Requests"
-              underline="none"
-              onClick={(e) => {
-                e.preventDefault();
-                props.history.push("/reqs");
-              }}
-            />
+            {!pendingRequest ? (
+              <Link
+                as={AntTab}
+                label="View Requests"
+                underline="none"
+                onClick={() => {
+                  props.history.push("/reqs");
+                }}
+              />
+            ) : null}
             <Link
               as={AntTab}
               label="Logout"

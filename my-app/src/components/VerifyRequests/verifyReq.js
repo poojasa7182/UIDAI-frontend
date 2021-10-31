@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Divider } from "@mui/material";
+import axios from "axios";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 const useStyles = makeStyles((theme) => ({
   containerReq: {
@@ -46,21 +48,140 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: "center",
     justifyContent: "space-evenly",
   },
+  hover: {
+    cursor: "pointer",
+    "&:hover": {
+      opacity: "0.5 !important",
+    },
+  },
 }));
 
 function VerifyRequest(props) {
   const classes = useStyles();
   const [captchaVal, setCaptchaVal] = React.useState("");
+  const [base64Icon, setbase64Icon] = React.useState("");
+  const [captchaTrxn, setcaptchaTrxn] = React.useState(null);
+  const [aadharNumber, setAadharNumber] = React.useState(null);
+  const [addressId, setAddressId] = React.useState(-1);
+  const [request, setRequest] = React.useState(null);
   const isActive = useMediaQuery("(max-width : 700px)");
-  const [captcha, setCaptcha] = React.useState(null);
-  const [client, setClient] = React.useState("pooja");
-  const [clientAadhar, setClientAadhar] = React.useState("567572542338");
-  const [introducerAdd, setIntAddress] = React.useState("");
+  const captchaGen = "http://localhost:8000/uidai/capcha/";
+  const otpGen = "http://localhost:8000/uidai/otp/";
 
+  const captcha = () => {
+    axios.get(captchaGen).then((res) => {
+      setbase64Icon(`data:image/png;base64,${res.data.image}`);
+      setcaptchaTrxn(res.data.trxnId);
+    });
+  };
+  React.useEffect(() => {
+    captcha();
+    getAadhar();
+    getAddress();
+  }, []);
+
+  const getAddress = () => {
+    axios
+      .get(
+        "http://127.0.0.1:8000/uidai/users/" + sessionStorage.getItem("user"),
+        {
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setAddressId(res.data.address.id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getAadhar = () => {
+    axios
+      .get("http://127.0.0.1:8000/uidai/sent/" + props.match.params.id, {
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setAadharNumber(res.data["introducer_aadhar"]);
+        setRequest(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleCaptchaChange = (e) => {
     setCaptchaVal(e.target.value);
   };
-
+  const handleOTP = (e) => {
+    e.preventDefault();
+    if (captchaVal !== "") {
+      const url = otpGen + captchaVal + "/" + captchaTrxn + "/" + aadharNumber;
+      axios
+        .get(url)
+        .then((res) => {
+          console.log("F:", aadharNumber, addressId);
+          const data = {
+            client_pk: request.client_id,
+            introducer: sessionStorage.getItem("user"),
+            address_pk: addressId,
+            password: (Math.random() + 1).toString(36).substring(7),
+          };
+          axios
+            .post("http://127.0.0.1:8000/uidai/confirm/", data, {
+              headers: {
+                Authorization: `Token ${sessionStorage.getItem("token")}`,
+              },
+            })
+            .then((res) => {
+              console.log(res.data, "Post request successfull");
+              const data1 = {
+                introducer: sessionStorage.getItem("user"),
+                client: request.client_id,
+                status: "success",
+              };
+              axios
+                .put(
+                  "http://127.0.0.1:8000/uidai/sent/" +
+                    props.match.params.id +
+                    "/",
+                  data1,
+                  {
+                    headers: {
+                      Authorization: `Token ${sessionStorage.getItem("token")}`,
+                    },
+                  }
+                )
+                .then((res) => {
+                  console.log("Request successfull!!", res.data);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+          if (res.data.status === "Success") {
+            // props.history.push("/otp");
+          } else if (res.data.status === "Failure") {
+            captcha();
+            alert(res.data.message);
+          }
+        })
+        .catch((e) => {
+          captcha();
+          alert("Invalid Captcha!");
+        });
+    } else {
+      alert("Server errored out with " + e);
+    }
+  };
   return (
     <Container
       className={classes.containerReq}
@@ -78,7 +199,7 @@ function VerifyRequest(props) {
       >
         Confirm your consent to share address
       </Typography>
-      <Container className={classes.inContainer}>
+      {/* <Container className={classes.inContainer}>
         <Box
           className={classes.box1}
           sx={{ flexDirection: isActive ? "column" : "row" }}
@@ -151,7 +272,6 @@ function VerifyRequest(props) {
           >
             Your Address
           </Typography>
-          {/* <br></br> */}
           <Typography
             variant="p"
             sx={{
@@ -164,7 +284,8 @@ function VerifyRequest(props) {
             xyz house, colony district
           </Typography>
         </Box>
-      </Container>
+      </Container> */}
+
       <Container className={classes.captchaContainer}>
         <Typography
           variant="p"
@@ -178,7 +299,19 @@ function VerifyRequest(props) {
         >
           Enter Captcha
         </Typography>
-        <img src={captcha} alt="not loaded" className={classes.image} />
+        <div style={{ display: "flex", margin: "auto" }}>
+          <img
+            style={{ width: 160, height: 50 }}
+            src={base64Icon}
+            className={classes.image}
+            alt="Captcha"
+          />
+          <ReplayIcon
+            className={classes.hover}
+            onClick={captcha}
+            sx={{ marginLeft: "1rem" }}
+          />
+        </div>
         <br></br>
         <TextField
           id="outlined-basic"
@@ -191,7 +324,7 @@ function VerifyRequest(props) {
         <br></br>
         <Box
           className={classes.buttons}
-          sx={{ width: isActive ? "100%" : "50%" }}
+          sx={{ width: isActive ? "100%" : "50%", mt: "1.5em" }}
         >
           <Button
             variant="contained"
@@ -222,8 +355,9 @@ function VerifyRequest(props) {
               justifySelf: "center",
               textAlign: "center",
             }}
+            onClick={handleOTP}
           >
-            Accept request
+            Get OTP
           </Button>
         </Box>
       </Container>
