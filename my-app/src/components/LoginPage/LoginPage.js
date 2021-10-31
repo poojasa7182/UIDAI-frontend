@@ -18,7 +18,7 @@ function LoginPage(props) {
   return (
     <div className={classes.parent}>
       <HeaderLogin />
-      <Login {...props} />
+      <Login setId={props.setId} setNumber={props.setNumber} />
     </div>
   );
 }

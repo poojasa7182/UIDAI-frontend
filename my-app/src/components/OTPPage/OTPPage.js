@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => {
   return {
     parent: {
       background:
-        "transparent linear-gradient(180deg, #ffbf80 0%, #FFFFFF 49%, #9FCF9A 100%, #138808 100%) 0% 0% no-repeat padding-box",
+        "transparent linear-gradient(180deg, #FF9933 0%, #FFFFFF 49%, #9FCF9A 100%, #138808 100%) 0% 0% no-repeat padding-box",
     },
   };
 });
@@ -18,7 +18,7 @@ function OTPPage(props) {
   return (
     <div className={classes.parent}>
       <HeaderLogin />
-      <OTP {...props} />
+      <OTP id={props.id} number={props.number} />
     </div>
   );
 }

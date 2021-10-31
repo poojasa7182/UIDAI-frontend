@@ -16,7 +16,12 @@ import VerifyReq from "./components/VerifyRequests/VerifyReqPage";
 import FormPage from "./components/FormPage/FormPage";
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+
+  const logInSave = sessionStorage.getItem("login")
+
+  const [loggedIn, setLoggedIn] = React.useState(logInSave === "true" ? true : false);
+  const [otpTrxn, setotpTrxn] = React.useState(null)
+  const [num, setnum] = React.useState(null)
 
   return (
     <Router>
@@ -24,14 +29,15 @@ function App() {
         exact
         path="/"
         render={(props) => {
-          return <LoginPage {...props} />;
+          return <LoginPage {...props} setId={setotpTrxn} setNumber={setnum} />;
         }}
       />
+      {console.log(num)}
       <Route
         exact
         path="/otp/:txn/:aadharNumber"
         render={(props) => {
-          return <OTPPage {...props} />;
+          return <OTPPage {...props} id={otpTrxn} number={num} />;
         }}
       />
       <Route
@@ -69,6 +75,7 @@ function App() {
           return <FormPage {...props} />;
         }}
       />
+      <Redirect to={loggedIn ? "/app" : "/"} />
     </Router>
   );
 }

@@ -5,12 +5,10 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
+import ReplayIcon from "@mui/icons-material/Replay";
 import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import CachedIcon from "@mui/icons-material/Cached";
-import IconButton from "@mui/material/IconButton";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
+import { useHistory } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -30,19 +28,9 @@ const useStyles = makeStyles((theme) => {
       maxWidth: "100%",
     },
     logo: {
-      width: "25%",
-      marginTop: "-90%",
-      marginLeft: "37.5%",
-    },
-    contain: {
-      background: "rgba(255,255,255,0.4)",
-      backdropFilter: "saturate(180%) blur(10px)",
-      // border:'10px solid black',
-      borderRadius: "50px",
-      paddingTop: "2.5%",
-      paddingBottom: "4%",
-      width: "50vw !important",
-      minWidth: "fit-content !important",
+      "&:hover": {
+        opacity: "0.5 !important",
+      },
     },
   };
 });
@@ -51,63 +39,78 @@ function Login(props) {
   const classes = useStyles();
   const [aadharNumber, setAadharNum] = React.useState("");
   const [errorAadhar, setErrorAAdhar] = React.useState(false);
+  const [errorCaptcha, setErrorCaptcha] = React.useState(false);
+  const [error, setError] = React.useState("");
   const [captchaVal, setCaptchaVal] = React.useState("");
   const isactive = useMediaQuery("(max-width : 500px)");
   const [base64Icon, setbase64Icon] = React.useState("");
   const [captchaTrxn, setcaptchaTrxn] = React.useState(null);
-  const [open, setOpen] = React.useState(props.location.openSnackbar);
-  const [msg, setMsg] = React.useState(props.location.snackMsg);
+  const Aadhar_Regex = new RegExp("^[1-9]{1}[0-9]{11}$");
+  const history = useHistory();
   let width = "40vw";
   let halfWidth = "20vw";
 
-  const apiurl = "http://localhost:8000/uidai/capcha/";
-  const otpurl = "http://localhost:8000/uidai/otp/";
-  React.useEffect(() => {
-    fetchCaptcha();
-  }, []);
-  const fetchCaptcha = (e) => {
-    axios
-      .get(apiurl)
-      .then((res) => {
-        setbase64Icon(`data:image/png;base64,${res.data.image}`);
-        setcaptchaTrxn(res.data.trxnId);
-      })
-      .catch((err) => {
-        alert("Error loading captcha!!");
-      });
+  const captchaGen = "http://localhost:8000/uidai/capcha/";
+  const otpGen = "http://localhost:8000/uidai/otp/";
+
+  const captcha = () => {
+    axios.get(captchaGen).then((res) => {
+      setbase64Icon(`data:image/png;base64,${res.data.image}`);
+      setcaptchaTrxn(res.data.trxnId);
+    });
   };
-  React.useState(() => {
-    if (!open) {
-      setMsg("");
-    }
-  }, [open]);
+
+  React.useEffect(() => {
+    captcha();
+  }, []);
+
   const handleLogin = (e) => {
     e.preventDefault();
-    setOpen(false);
-    axios
-      .get(otpurl + captchaVal + "/" + captchaTrxn)
-      .then((res) => {
-        if (res.data["status"] === "Success") {
-          props.history.push(`/otp/${res.data["message"]}/${aadharNumber}`);
-        } else {
-          setMsg(res.data["message"]);
-          setOpen(true);
-        }
-      })
-      .catch((err) => {
-        setMsg("Server errord out: " + err);
-        setOpen(true);
-      });
+    if (errorCaptcha === false && errorAadhar === false) {
+      if (aadharNumber !== "" && captchaVal !== "") {
+        const url =
+          otpGen + captchaVal + "/" + captchaTrxn + "/" + aadharNumber;
+        axios
+          .get(url)
+          .then((res) => {
+            if (res.data.status === "Success") {
+              props.setId(res.data.message);
+              props.setNumber(String(aadharNumber));
+              history.push("otp");
+            } else if (res.data.status === "Failure") {
+              setError(res.data.message);
+              setCaptchaVal("");
+              captcha();
+              document.getElementById("invalid").style.display = "inline";
+            }
+          })
+          .catch((e) => {
+            setCaptchaVal("");
+            captcha();
+            document.getElementById("invalid").style.display = "inline";
+          });
+      } else {
+        setErrorAAdhar(true);
+        setErrorCaptcha(true);
+      }
+    }
   };
 
   const handleAadharChange = (e) => {
     setAadharNum(e.target.value);
+    setErrorAAdhar(!Aadhar_Regex.test(e.target.value));
   };
 
   const handleCaptchaChange = (e) => {
     setCaptchaVal(e.target.value);
+    if (e.target.value.length !== 6) {
+      setErrorCaptcha(true);
+    } else {
+      setErrorCaptcha(false);
+    }
   };
 
+  React.useEffect(() => {}, []);
   if (isactive) {
     width = "80vw";
     halfWidth = "40vw";
@@ -119,7 +122,8 @@ function Login(props) {
           className={classes.logo}
           src="https://iconape.com/wp-content/png_logo_vector/aadhar-logo.png"
         ></img>
-        <br />
+        <br></br>
+        {console.log(props.otp)}
         <Box
           component="div"
           style={{
@@ -175,13 +179,25 @@ function Login(props) {
               variant="outlined"
               sx={{ width: { halfWidth } }}
               value={captchaVal}
+              error={errorCaptcha}
               onChange={(e) => handleCaptchaChange(e)}
             ></TextField>
-            <Box component="div" height={53} width={halfWidth}>
-              <img style={{ width: 160, height: 50 }} src={base64Icon} />
-              <IconButton variant="contained" onClick={fetchCaptcha}>
-                <CachedIcon />
-              </IconButton>
+            <Box
+              component="div"
+              height={53}
+              width={halfWidth}
+              sx={{ alignItems: "center", display: "flex" }}
+            >
+              <img
+                style={{ width: 160, height: 50 }}
+                src={base64Icon}
+                alt="Captcha"
+              />
+              <ReplayIcon
+                className={classes.hover}
+                onClick={captcha}
+                sx={{ marginLeft: "1rem" }}
+              />
             </Box>
           </Box>
           <Button
@@ -198,6 +214,22 @@ function Login(props) {
           >
             Generate OTP
           </Button>
+          <Typography
+            component="p"
+            id="invalid"
+            variant="p"
+            textAlign={"center"}
+            sx={{
+              color: "red",
+              border: "2px solid red",
+              borderRadius: 28,
+              width: "fit-content !important",
+              padding: "0.5rem 2rem",
+              display: "none",
+            }}
+          >
+            {error}
+          </Typography>
         </Box>
       </Container>
       <Snackbar
