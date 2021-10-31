@@ -18,27 +18,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Requests(props) {
-  const classes = useStyles();
-  // const [address, setAddress] = React.useState('');
-  // @house": "34/1 Type- V Ground Floor",
-  //  "@pc": "110001",
-  const address = {
-    country: "India",
-    state: "Delhi",
-    dist: "New Delhi",
-    subDist: "New Delhi",
-    po: "New Delhi G.p",
-    pc: "110001",
-    vtc: "New Delhi G.P.O.",
-    landmark: "",
-    loc: "Kali Bari Marg, DIZ Area",
-    street: "BSNL Colony",
-    house: "34/1 Type- V Ground Floor",
-  };
-  const [loc, setLoc] = React.useState(address.loc);
-  const [street, setStreet] = React.useState(address.street);
-  const [house, setHouse] = React.useState(address.house);
-  const isActive = useMediaQuery("(max-width : 700px)");
 
   return (
     <Container
