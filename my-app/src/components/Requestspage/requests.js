@@ -7,7 +7,13 @@ import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { Divider } from "@mui/material";
-
+import {
+  DialogTitle,
+  DialogActions,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+} from "@mui/material";
 const useStyles = makeStyles((theme) => ({
   containerReq: {
     padding: "2%",
@@ -154,6 +160,7 @@ function Requests(props) {
                     justifySelf: "center",
                     textAlign: "center",
                   }}
+                  onClick={() => {}}
                 >
                   Cancel request
                 </Button>
@@ -162,7 +169,10 @@ function Requests(props) {
                   variant="outlined"
                   style={{ maxWidth: "75%", padding: "1.5% 3%" }}
                   type="submit"
-                  href="./req"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    props.history.push("/req");
+                  }}
                   sx={{
                     borderRadius: 28,
                     alignSelf: "center",
@@ -175,6 +185,36 @@ function Requests(props) {
               </div>
             </Box>
             {isActive ? <br></br> : ""}
+            {/* <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">Delete Request</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure cancel the request?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={handleClose}
+                  variant="contained"
+                  color="primary"
+                >
+                  No
+                </Button>
+                <Button
+                  onClick={deleteRequest}
+                  autoFocus
+                  variant="contained"
+                  color="secondary"
+                >
+                  Yes, delete request
+                </Button>
+              </DialogActions>
+            </Dialog> */}
           </Container>
         );
       })}

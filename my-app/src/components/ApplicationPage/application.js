@@ -17,6 +17,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Badge } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
+import {
+  DialogTitle,
+  DialogActions,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+} from "@mui/material";
+import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   item: {
     minHeight: "100%",
@@ -43,197 +51,268 @@ const useStyles = makeStyles((theme) => ({
 
 function Application(props) {
   const classes = useStyles();
-  const [user, setUser] = React.useState("Paritosh Kabra");
-  const [introducer, setintroducer] = React.useState("Landlord singh");
+  const [user, setUser] = React.useState(null);
+  const [introducer, setIntroducer] = React.useState(null);
+  const [status, setStatus] = React.useState(null);
+  const [requestId, setRequestId] = React.useState(-1);
+  const [open, setOpen] = React.useState(false);
   const reqStatus = 1;
-  const aadhar_me = "123443211234";
-  const aadhar_intro = "98766789876";
   const isActive = useMediaQuery("(max-width : 700px)");
-  const address = [{ f: "val1" }, { f: "val2" }, { f: "val3" }, { f: "val4" }];
-  const [open, setOpen] = React.useState(props.location.openSnackbar);
-  return (
-    // sx={}
-    //{ height: !isActive ? "100vh" : "auto" }
-    <Container sx={{ height: !isActive ? "90vh" : "auto" }}>
-      <Container
-        sx={{
-          // height: "50%",
-          // // width:"",
-          padding: "4rem",
-          display: "flex",
-          flexDirection: !isActive ? "row" : "column",
-          alignItems: "center",
-          border: "2px solid black",
-          borderRadius: "40px",
-          marginTop: "2%",
-        }}
-      >
-        <Container
-          className={`${classes.item} ${classes.itemSpecial}`}
-          style={{
-            minWidth: !isActive ? "33%" : "100%",
-            maxHeight: isActive ? "150px" : "100%",
-            alignItems: isActive ? "flex-start" : "",
-          }}
-        >
-          <img
-            src="https://cdn.pixabay.com/photo/2021/09/27/14/39/paris-6661136__480.jpg"
-            alt=""
-            className={classes.image}
-            style={{
-              width: isActive ? "100%" : "75%",
-              height: isActive ? "150px" : "",
-              marginBottom: isActive ? "10%" : "",
-            }}
-          />
-        </Container>
-        <Container
-          className={`${classes.item} ${classes.itemSpecial}`}
-          style={{
-            minWidth: !isActive ? "33%" : "100%",
-            alignItems: isActive ? "flex-start" : "",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: isActive ? "flex-start" : "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography
-              variant="p"
-              sx={{
-                fontSize: "18px",
-                fontWeight: "bold",
-                textAlign: isActive ? "left" : "center",
-              }}
-            >
-              {user}
-            </Typography>
-            <List dense={true}>
-              {address.map((field, index) => {
-                return (
-                  <ListItem key={index.toString()} alignItems="flex-start">
-                    <Typography
-                      variant="h6"
-                      component="span"
-                      sx={{ fontSize: "14px", fontWeight: "bold" }}
-                    >
-                      f1:&nbsp;
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      component="span"
-                      sx={{ fontSize: "14px", fontWeight: "300" }}
-                    >
-                      {field.f}
-                    </Typography>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </div>
-        </Container>
-        <Container
-          className={`${classes.item} ${classes.itemSpecial}`}
-          style={{
-            minWidth: !isActive ? "33%" : "100%",
-            alignItems: isActive ? "flex-start" : "",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: isActive ? "flex-start" : "center",
-              justifyContent: "center",
-            }}
-          >
-            <Typography
-              variant="p"
-              sx={{
-                fontSize: "14px",
-                fontWeight: "bold",
-                textAlign: isActive ? "left" : "center",
-              }}
-            >
-              Current Address
-            </Typography>
-            <List dense={true}>
-              {address.map((field, index) => {
-                return (
-                  <ListItem key={index.toString()} alignItems="flex-start">
-                    <Typography
-                      variant="h6"
-                      component="span"
-                      sx={{ fontSize: "14px", fontWeight: "bold" }}
-                    >
-                      f1:&nbsp;
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      component="span"
-                      sx={{ fontSize: "14px", fontWeight: "300" }}
-                    >
-                      {field.f}
-                    </Typography>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </div>
-        </Container>
-      </Container>
-      <br />
-      {/* <Badge badgeContent={100} color="secondary"> */}
-      <Container
-        sx={{
-          padding: "4rem",
-          display: "flex",
-          flexDirection: !isActive ? "row" : "column",
-          border: "2px solid black",
-          borderRadius: "40px",
-        }}
-      >
-        <Container
-          className={classes.item}
-          style={{ overflow: "auto", overflowX: "hidden" }}
-        >
-          <Box sx={{ minWidth: 275 }}>
-            <div>
-              <Typography
-                sx={{ fontSize: 20, fontWeight: "bold" }}
-                color="text.secondary"
-                gutterBottom
-              >
-                Introducer Details
-              </Typography>
-              <Typography
-                variant="h6"
-                sx={{ fontSize: "18px", fontWeight: "bold" }}
-                component="span"
-              >
-                {introducer != "" ? (
-                  <span>
-                    {introducer}
-                    <span style={{ fontSize: "24px" }}>
-                      <br />
-                    </span>
-                  </span>
-                ) : (
-                  ""
-                )}
+  // const [open, setOpen] = React.useState(props.location.openSnackbar);
 
-                <span style={{ fontSize: "16px" }}>Aadhar Number:</span>
+  const handleClose = () => {
+    setOpen(false);
+  };
+  React.useEffect(() => {
+    axios
+      .get(
+        "http://127.0.0.1:8000/uidai/users/" +
+          sessionStorage.getItem("user") +
+          "/",
+        {
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log("address: ", res.data);
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    getRequest();
+  }, []);
+  const getRequest = () => {
+    axios
+      .get(
+        "http://127.0.0.1:8000/uidai/user_request/" +
+          sessionStorage.getItem("user") +
+          "/",
+        {
+          headers: {
+            Authorization: `Token ${sessionStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log("request_sent: ", res.data["request_client"][0]);
+        setIntroducer(res.data["request_client"][0]["introducer"]);
+        setStatus(res.data["request_client"][0]["status"]);
+        setRequestId(res.data["request_client"][0]["id"]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const deleteRequest = () => {
+    axios
+      .delete("http://127.0.0.1:8000/uidai/sent/" + requestId + "/", {
+        headers: {
+          Authorization: `Token ${sessionStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log("Request deleted successfully!!");
+        getRequest();
+        setStatus(null);
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  if (user !== null) {
+    return (
+      // sx={}
+      //{ height: !isActive ? "100vh" : "auto" }
+      <Container sx={{ height: !isActive ? "90vh" : "auto" }}>
+        <Container
+          sx={{
+            // height: "50%",
+            // // width:"",
+            padding: "4rem",
+            display: "flex",
+            flexDirection: !isActive ? "row" : "column",
+            alignItems: "center",
+            border: "2px solid black",
+            borderRadius: "40px",
+            marginTop: "2%",
+          }}
+        >
+          <Container
+            className={`${classes.item} ${classes.itemSpecial}`}
+            style={{
+              minWidth: !isActive ? "33%" : "100%",
+              maxHeight: isActive ? "150px" : "100%",
+              alignItems: isActive ? "flex-start" : "",
+            }}
+          >
+            <img
+              src="https://cdn.pixabay.com/photo/2021/09/27/14/39/paris-6661136__480.jpg"
+              alt=""
+              className={classes.image}
+              style={{
+                width: isActive ? "100%" : "75%",
+                height: isActive ? "150px" : "",
+                marginBottom: isActive ? "10%" : "",
+              }}
+            />
+          </Container>
+          <Container
+            className={`${classes.item} ${classes.itemSpecial}`}
+            style={{
+              minWidth: !isActive ? "33%" : "100%",
+              alignItems: isActive ? "flex-start" : "",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: isActive ? "flex-start" : "center",
+                justifyContent: "center",
+                maxHeight: "100%",
+              }}
+            >
+              <Typography
+                variant="p"
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  textAlign: isActive ? "left" : "center",
+                }}
+              >
+                {user.name}
               </Typography>
-              <Typography sx={{ ml: 0.5 }} component="span">
-                {aadhar_me}
-              </Typography>
+              <List dense={true} style={{ height: "200px", overflow: "auto" }}>
+                {Object.keys(user).map((field, index) => {
+                  return field !== "address" &&
+                    field !== "name" &&
+                    field !== "username" &&
+                    field !== "lastModified" &&
+                    field !== "id" ? (
+                    <ListItem key={index.toString()} alignItems="flex-start">
+                      <Typography
+                        variant="h6"
+                        component="span"
+                        sx={{ fontSize: "14px", fontWeight: "bold" }}
+                      >
+                        {field}:&nbsp;
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        component="span"
+                        sx={{ fontSize: "14px", fontWeight: "300" }}
+                      >
+                        {user[`${field}`]}
+                      </Typography>
+                    </ListItem>
+                  ) : null;
+                })}
+              </List>
             </div>
-            <div style={{ marginTop: "10px" }}>
-              {/* <Typography
+          </Container>
+          <Container
+            className={`${classes.item} ${classes.itemSpecial}`}
+            style={{
+              minWidth: !isActive ? "33%" : "100%",
+              alignItems: isActive ? "flex-start" : "",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: isActive ? "flex-start" : "center",
+                justifyContent: "center",
+              }}
+            >
+              <Typography
+                variant="p"
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  textAlign: isActive ? "left" : "center",
+                }}
+              >
+                Current Address
+              </Typography>
+              <List dense={true} style={{ height: "200px", overflow: "auto" }}>
+                {Object.keys(user.address).map((field, index) => {
+                  return (
+                    <ListItem key={index.toString()} alignItems="flex-start">
+                      <Typography
+                        variant="h6"
+                        component="span"
+                        sx={{ fontSize: "14px", fontWeight: "bold" }}
+                      >
+                        {field}:&nbsp;
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        component="span"
+                        sx={{ fontSize: "14px", fontWeight: "300" }}
+                      >
+                        {user.address[`${field}`]}
+                      </Typography>
+                    </ListItem>
+                  );
+                })}
+              </List>
+            </div>
+          </Container>
+        </Container>
+        <br />
+        {/* <Badge badgeContent={100} color="secondary"> */}
+        {status === "empty" || status === "success" ? (
+          <Container
+            sx={{
+              padding: "4rem",
+              display: "flex",
+              flexDirection: !isActive ? "row" : "column",
+              border: "2px solid black",
+              borderRadius: "40px",
+            }}
+          >
+            <Container
+              className={classes.item}
+              style={{ overflow: "auto", overflowX: "hidden" }}
+            >
+              <Box sx={{ minWidth: 275 }}>
+                <div>
+                  <Typography
+                    sx={{ fontSize: 20, fontWeight: "bold" }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Introducer Details
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontSize: "18px", fontWeight: "bold" }}
+                    component="span"
+                  >
+                    {introducer !== null ? (
+                      <span>
+                        {introducer.name}
+                        <span style={{ fontSize: "24px" }}>
+                          <br />
+                        </span>
+                      </span>
+                    ) : (
+                      ""
+                    )}
+
+                    <span style={{ fontSize: "16px" }}>Aadhar Number:</span>
+                  </Typography>
+                  <Typography sx={{ ml: 0.5 }} component="span">
+                    {introducer.username}
+                  </Typography>
+                </div>
+                <div style={{ marginTop: "10px" }}>
+                  {/* <Typography
                 variant="span"
                 sx={{ fontSize: "14px", fontWeight: "bold" }}
               >
@@ -242,40 +321,56 @@ function Application(props) {
               <Typography component="span" sx={{ ml: 0.5, fontSize: "14px" }}>
                 5462325894
               </Typography> */}
-            </div>
-          </Box>
-        </Container>
-        {isActive ? (
-          <React.Fragment>
-            <Divider />
-            <br />
-          </React.Fragment>
-        ) : null}
-        <Container className={classes.item}>
-          <Box className={classes.status}>
-            <div>
-              <Typography
-                sx={{ fontSize: 20, fontWeight: "bold" }}
-                color="text.secondary"
-                gutterBottom
-              >
-                Status
-              </Typography>
-              <Typography sx={{ fontSize: 16, fontWeight: "500" }} gutterBottom>
-                Awaiting Introducer Response
-              </Typography>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingTop: "10%",
-                width: "fit-content",
-              }}
-            >
-              {/* <Button
+                </div>
+              </Box>
+            </Container>
+            {isActive ? (
+              <React.Fragment>
+                <Divider />
+                <br />
+              </React.Fragment>
+            ) : null}
+            <Container className={classes.item}>
+              <Box className={classes.status}>
+                <div>
+                  <Typography
+                    sx={{ fontSize: 20, fontWeight: "bold" }}
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Status
+                  </Typography>
+                  <Typography
+                    sx={{ fontSize: 16, fontWeight: "500" }}
+                    gutterBottom
+                  >
+                    {status === "success" ? (
+                      <Typography
+                        variant="h1"
+                        style={{
+                          color: "green",
+                          fontSize: "16px",
+                          textAlign: "start",
+                        }}
+                      >
+                        Your request was accepted!!
+                      </Typography>
+                    ) : (
+                      "Awaiting Introducer Response"
+                    )}
+                  </Typography>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    paddingTop: "10%",
+                    width: "fit-content",
+                  }}
+                >
+                  {/* <Button
                 variant="outlined"
                 startIcon={<EditIcon />}
                 sx={{ mt: 1, borderRadius: 28 }}
@@ -283,7 +378,7 @@ function Application(props) {
               >
                 Edit Request
               </Button> */}
-              {/* <Button
+                  {/* <Button
                 variant="outlined"
                 color="error"
                 startIcon={<DeleteIcon />}
@@ -292,43 +387,93 @@ function Application(props) {
               >
                 Delete Request
               </Button> */}
-            </div>
-          </Box>
-        </Container>
-        <Container>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              paddingTop: "10%",
-              width: "fit-content",
-            }}
+                </div>
+              </Box>
+            </Container>
+            <Container>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  paddingTop: "10%",
+                  width: "fit-content",
+                }}
+              >
+                {status === "empty" ? (
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    // startIcon={<DeleteIcon />}
+                    sx={{ mt: 1, borderRadius: 2 }}
+                    fullWidth
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setOpen(true);
+                    }}
+                  >
+                    Cancel Request
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    color="success"
+                    // startIcon={<DeleteIcon />}
+                    sx={{ mt: 1, borderRadius: 2 }}
+                    fullWidth
+                    onClick={(e) => {
+                      e.preventDefault();
+                      props.history.push("/form");
+                    }}
+                  >
+                    Update Address
+                  </Button>
+                )}
+              </div>
+            </Container>
+          </Container>
+        ) : (
+          <Typography
+            variant="h1"
+            style={{ color: "green", fontSize: "16px", textAlign: "center" }}
           >
-            <Button
-              variant="outlined"
-              color="error"
-              // startIcon={<DeleteIcon />}
-              sx={{ mt: 1, borderRadius: 2 }}
-              fullWidth
-            >
-              cancel Request
+            You have no pending request! Create a new request for address
+            update.
+          </Typography>
+        )}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Delete Request</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure cancel the request?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} variant="contained" color="primary">
+              No
             </Button>
-          </div>
-        </Container>
+            <Button
+              onClick={deleteRequest}
+              autoFocus
+              variant="contained"
+              color="secondary"
+            >
+              Yes, delete request
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {/* Badge */}
       </Container>
-      <Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={() => {
-          setOpen(false);
-        }}
-        message={props.location.snackMsg}
-      />
-      {/* Badge */}
-    </Container>
-  );
+    );
+  } else {
+    return <p>Loading data...</p>;
+  }
 }
 
 export default Application;

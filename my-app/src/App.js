@@ -76,7 +76,7 @@ function App() {
           return <FormPage {...props} loginStatus={loggedIn} />;
         }}
       />
-      <Redirect to={loggedIn ? "/app" : "/"} />
+      {!loggedIn && <Redirect to="/" />}
     </Router>
   );
 }
