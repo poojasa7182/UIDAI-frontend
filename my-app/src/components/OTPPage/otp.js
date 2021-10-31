@@ -6,6 +6,9 @@ import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import OtpInput from "react-otp-input";
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { makeStyles } from "@mui/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import "./otp.css";
@@ -46,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 function OTP(props) {
   const classes = useStyles();
   const [otp, setOTP] = React.useState("");
+  const [open, setopen] = React.useState(false)
   const [error, setError] = React.useState("Error in Generating Otp...");
   const isactive = useMediaQuery("(max-width : 500px)");
 
@@ -62,23 +66,43 @@ function OTP(props) {
     setOTP(otp);
   };
 
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setopen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+
   const loginFunc = (e) => {
     e.preventDefault();
-    console.log(e);
     if (otp.length === 6) {
       const url = `${login}${otp}/${props.id}/${props.number}`;
       axios.get(url).then((res) => {
         // if (res.data)
-        console.log(res.data);
         if (res.data.status === "Fail") {
+          setopen(true)
           setError(res.data.message);
-          document.getElementById("invalid").style.display = "inline";
+          // document.getElementById("invalid").style.display = "inline";
         } else {
           sessionStorage.setItem("login", "true");
           sessionStorage.setItem("token", res.data.message);
           sessionStorage.setItem("user", res.data.id);
           history.push("/app");
-          console.log(res.data);
         }
       });
     }
@@ -135,7 +159,7 @@ function OTP(props) {
           />
           {/* <LoadingButton loading /> */}
           <br></br>
-          <Typography
+          {/* <Typography
             component="p"
             id="invalid"
             variant="p"
@@ -150,7 +174,7 @@ function OTP(props) {
             }}
           >
             {error}
-          </Typography>
+          </Typography> */}
           <Button
             variant="contained"
             style={{ backgroundColor: "#D32828", width: "50%" }}
@@ -165,6 +189,13 @@ function OTP(props) {
           </Button>
         </Box>
       </Container>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={error}
+        action={action}
+      />
     </div>
   );
 }

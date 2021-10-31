@@ -3,9 +3,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import TextField from "@mui/material/TextField";
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   containerReq: {
@@ -47,9 +51,74 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Request(props) {
+  const [aadhar, setaadhar] = React.useState("")
+  const [message, setmessage] = React.useState("")
+  const [open, setopen] = React.useState(false)
+  const [error, seterror] = React.useState(false)
   const classes = useStyles();
-
   const isActive = useMediaQuery("(max-width : 700px)");
+  const Aadhar_Regex = new RegExp("^[1-9]{1}[0-9]{11}$");
+
+
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setopen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+
+  const hanadelAadhar = (e) => {
+    setaadhar(e.target.value)
+    seterror(!Aadhar_Regex.test(e.target.value));
+  }
+
+  const handelClick = (e) => {
+    if (error || aadhar === "") {
+      setmessage("Enter Valid Aadhar Number")
+      seterror(true)
+      setopen(true)
+    }
+    else {
+      const createUser = "http://localhost:8000/uidai/create/"
+      const url = `${createUser}${aadhar}`
+      axios.get(url)
+        .then(res => {
+          console.log(res.data)
+          const sent = "http://localhost:8000/uidai/sent/"
+          const thisUrl = `${sent}${sessionStorage.getItem("user")}/${res.data}`
+          axios.get(thisUrl, {
+            headers: {
+              'Authorization': `Token ${sessionStorage.getItem("token")}`,
+            }
+          })
+            .then(res => {
+              setmessage(res.data)
+              setopen(true)
+            })
+            .catch(e => {
+              console.log(e)
+            })
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    }
+  }
 
   return (
     <Container
@@ -86,12 +155,14 @@ function Request(props) {
           >
             Introducer's Aadhar Number:
           </Typography>
-
           <TextField
             label="Aadhar Number"
             variant="outlined"
-            value=""
-            // onChange = {}
+            value={aadhar}
+            error={error}
+            onChange={(e) => {
+              hanadelAadhar(e)
+            }}
           ></TextField>
           {isActive ? <br /> : ""}
           <Button
@@ -103,10 +174,17 @@ function Request(props) {
             }}
             type="submit"
             sx={{ borderRadius: 28, alignSelf: "center" }}
-            // onClick={handleLogin}
+            onClick={(e) => handelClick(e)}
           >
             Request address details
           </Button>
+          <Snackbar
+            open={open}
+            autoHideDuration={6000}
+            onClose={handleClose}
+            message={message}
+            action={action}
+          />
         </Box>
         <Box
           className={classes.box2}
