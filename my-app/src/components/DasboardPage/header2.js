@@ -107,6 +107,9 @@ const useStyles = makeStyles((theme) => {
       width: "100%",
       alignSelf: "center",
     },
+    popup:{
+      zIndex:'1'
+    }
   };
 });
 
@@ -183,6 +186,7 @@ function HeaderApp(props) {
                 placement="bottom-start"
                 transition
                 disablePortal
+                className={classes.popup}
               >
                 {({ TransitionProps, placement }) => (
                   <Grow
@@ -194,9 +198,10 @@ function HeaderApp(props) {
                           : "left bottom",
                     }}
                   >
-                    <Paper>
+                    <Paper sx={{zIndex:'100'}}>
                       <ClickAwayListener onClickAway={handleClose}>
                         <MenuList
+                          sx={{zIndex:'100'}}
                           autoFocusItem={open}
                           id="composition-menu"
                           aria-labelledby="composition-button"
