@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 function OTP(props) {
   const classes = useStyles();
   const [otp, setOTP] = React.useState("");
-  const [error, setError] = React.useState('')
+  const [error, setError] = React.useState('Error in Generating Otp...')
   const isactive = useMediaQuery("(max-width : 500px)");
 
   const login = 'http://localhost:8000/uidai/kyc/'
