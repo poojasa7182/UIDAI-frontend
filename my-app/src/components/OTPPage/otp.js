@@ -76,6 +76,7 @@ function OTP(props) {
         } else {
           sessionStorage.setItem("login", "true");
           sessionStorage.setItem("token", res.data.message);
+          sessionStorage.setItem("user", res.data.id);
           history.push("/app");
           console.log(res.data);
         }
