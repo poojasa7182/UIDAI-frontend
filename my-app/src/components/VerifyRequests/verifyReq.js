@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   containerReq: {
     padding: "2%",
     display: "flex !important",
-    flexWrap: "wrap",
+    flexWrap: "nowrap",
     flexDirection: "column",
   },
   inContainer: {
@@ -69,10 +69,10 @@ function VerifyRequest(props) {
       <Typography
         variant="p"
         sx={{
-          fontSize: "1.5em",
+          fontSize: !isActive ? "1.5em" : "1.2em",
           fontWeight: "bold",
           className: classes.head,
-          textAlign: isActive ? "justify !important" : "center",
+          textAlign: "center",
           marginBottom: "2%",
         }}
       >
@@ -87,7 +87,7 @@ function VerifyRequest(props) {
             <Typography
               variant="p"
               sx={{
-                fontSize: "1.3em",
+                fontSize: !isActive ? "1.3em" : "1.0em",
                 fontWeight: "bold",
                 className: classes.head,
                 textAlign: isActive ? "justify !important" : "center",
@@ -100,7 +100,7 @@ function VerifyRequest(props) {
             <Typography
               variant="p"
               sx={{
-                fontSize: "1.3em",
+                fontSize: !isActive ? "1.3em" : "1.0em",
                 className: classes.head,
                 textAlign: isActive ? "justify !important" : "center",
                 marginBottom: "2%",
@@ -114,7 +114,7 @@ function VerifyRequest(props) {
             <Typography
               variant="p"
               sx={{
-                fontSize: "1.3em",
+                fontSize: !isActive ? "1.3em" : "1.0em",
                 fontWeight: "bold",
                 className: classes.head,
                 textAlign: "center",
@@ -127,7 +127,7 @@ function VerifyRequest(props) {
             <Typography
               variant="p"
               sx={{
-                fontSize: "1.3em",
+                fontSize: !isActive ? "1.3em" : "1.0em",
                 className: classes.head,
                 textAlign: isActive ? "justify !important" : "center",
                 marginBottom: "2%",
@@ -143,7 +143,7 @@ function VerifyRequest(props) {
             variant="p"
             sx={{
               fontWeight: "bold",
-              fontSize: "1.4em",
+              fontSize: !isActive ? "1.4em" : "1.1em",
               className: classes.head,
               textAlign: "center",
               marginBottom: "2%",
@@ -155,7 +155,7 @@ function VerifyRequest(props) {
           <Typography
             variant="p"
             sx={{
-              fontSize: "1.2em",
+              fontSize: !isActive ? "1.2em" : "0.9em",
               className: classes.head,
               textAlign: "center",
               marginBottom: "2%",
@@ -198,12 +198,14 @@ function VerifyRequest(props) {
             color="error"
             style={{ maxWidth: "75%", padding: "1.5% 3%" }}
             type="submit"
-            href="../reqs"
             sx={{
               borderRadius: 28,
               alignSelf: "center",
               justifySelf: "center",
               textAlign: "center",
+            }}
+            onClick={() => {
+              props.history.push("/reqs");
             }}
           >
             Go Back
