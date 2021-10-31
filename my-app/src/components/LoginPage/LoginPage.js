@@ -13,12 +13,12 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-function LoginPage() {
+function LoginPage(props) {
   const classes = useStyles();
   return (
     <div className={classes.parent}>
       <HeaderLogin />
-      <Login />
+      <Login {...props} />
     </div>
   );
 }

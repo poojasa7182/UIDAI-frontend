@@ -1,23 +1,23 @@
-import HeaderApp from '../DasboardPage/header2'
-import VerifyRequest from './verifyReq'
+import HeaderApp from "../DasboardPage/header2";
+import VerifyRequest from "./verifyReq";
 import React from "react";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => {
   return {
-        temp:{
-            overflowX:'hidden',
-            overflowY:'hidden'
-        }
+    temp: {
+      overflowX: "hidden",
+      overflowY: "hidden",
+    },
   };
 });
 
-function VerifyReq() {
+function VerifyReq(props) {
   const classes = useStyles();
   return (
     <div className={classes.temp}>
       <HeaderApp />
-      <VerifyRequest />
+      <VerifyRequest {...props} />
     </div>
   );
 }

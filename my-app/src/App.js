@@ -9,11 +9,11 @@ import {
 import LoginPage from "./components/LoginPage/LoginPage.js";
 import OTPPage from "./components/OTPPage/OTPPage";
 import ApplicationPage from "./components/ApplicationPage/ApplicationPage";
-import RequestPage from "./components/ClientRequestPage/RequestPage"
+import RequestPage from "./components/ClientRequestPage/RequestPage";
 import React from "react";
-import RequestsPage from './components/Requestspage/RequestsPage'
-import VerifyReq from './components/VerifyRequests/VerifyReqPage'
-import FormPage from './components/FormPage/FormPage'
+import RequestsPage from "./components/Requestspage/RequestsPage";
+import VerifyReq from "./components/VerifyRequests/VerifyReqPage";
+import FormPage from "./components/FormPage/FormPage";
 
 function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -29,7 +29,7 @@ function App() {
       />
       <Route
         exact
-        path="/otp"
+        path="/otp/:txn/:aadharNumber"
         render={(props) => {
           return <OTPPage {...props} />;
         }}

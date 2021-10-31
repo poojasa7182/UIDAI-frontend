@@ -9,6 +9,7 @@ import { makeStyles } from "@mui/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 import "./otp.css";
+import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   parent: {
     height: "90vh",
@@ -16,31 +17,31 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column"
-    },
+    flexDirection: "column",
+  },
   otp: {
     width: "100%",
     // border:'2px solid black',
     justifyContent: "center",
   },
   logo: {
-    width:'25%',
-    marginTop:'-90%',
-    marginLeft:'37.5%'
+    width: "25%",
+    marginTop: "-90%",
+    marginLeft: "37.5%",
   },
-  contain:{
-    background: 'rgba(255,255,255,0.4)',
-    backdropFilter: 'saturate(180%) blur(10px)',
+  contain: {
+    background: "rgba(255,255,255,0.4)",
+    backdropFilter: "saturate(180%) blur(10px)",
     // border:'10px solid black',
-    borderRadius:'50px',
-    paddingTop: '2.5%',
-    paddingBottom: '4%',
-    width: '40vw !important',
-    minWidth : 'fit-content !important'
-  }
+    borderRadius: "50px",
+    paddingTop: "2.5%",
+    paddingBottom: "4%",
+    width: "40vw !important",
+    minWidth: "fit-content !important",
+  },
 }));
 
-function OTP() {
+function OTP(props) {
   const classes = useStyles();
   const [otp, setOTP] = React.useState("");
   const isactive = useMediaQuery("(max-width : 500px)");
@@ -53,14 +54,15 @@ function OTP() {
     setOTP(otp);
   };
 
+  const ekyc_url = "http://localhost:8000/uidai/kyc/";
   return (
     <div className={classes.parent}>
       <Container className={classes.contain}>
-      <img
+        <img
           className={classes.logo}
           src="https://iconape.com/wp-content/png_logo_vector/aadhar-logo.png"
         ></img>
-        <br></br>
+        <br />
         <Box
           component="div"
           sx={{
@@ -83,7 +85,7 @@ function OTP() {
             OTP has been sent on on your registered aadhar mobile number
           </Typography>
         </Box>
-        <br></br>
+        <br />
         <Box
           component="form"
           autoComplete={false}
@@ -102,14 +104,41 @@ function OTP() {
             separator={<span> &nbsp; </span>}
             className={classes.otp}
           />
-          <br></br>
+          <br />
           <Button
             variant="contained"
-            style={{ backgroundColor: "#D32828", width:'50%'}}
+            style={{ backgroundColor: "#D32828", width: "50%" }}
             type="submit"
             sx={{ borderRadius: 28 }}
             onClick={(e) => {
               e.preventDefault();
+              axios
+                .get(
+                  `${ekyc_url}${otp}/${props.match.params.txn}/${props.match.params.aadharNumber}`
+                )
+                .then((res) => {
+                  console.log(res.data);
+                  if (res.data["message"] === "done") {
+                    props.history.push({
+                      pathname: "/app",
+                      openSnackbar: true,
+                      snackMsg: "Loggged In Successfully!",
+                    });
+                  } else {
+                    props.history.push({
+                      pathname: "/",
+                      openSnackbar: true,
+                      snackMsg: "Authentication Failed",
+                    });
+                  }
+                })
+                .catch((err) => {
+                  props.history.push({
+                    pathname: "/",
+                    openSnackbar: true,
+                    snackMsg: "Server Error: " + err,
+                  });
+                });
             }}
             fullWidth
           >
