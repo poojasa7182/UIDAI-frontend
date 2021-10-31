@@ -16,7 +16,7 @@ function RequestPage(props) {
   const classes = useStyles();
   return (
     <div className={classes.temp}>
-      <HeaderApp />
+      <HeaderApp {...props} />
       <Request {...props} />
     </div>
   );

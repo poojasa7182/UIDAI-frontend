@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 function OTP(props) {
   const classes = useStyles();
   const [otp, setOTP] = React.useState("");
-  const [error, setError] = React.useState("");
+  const [error, setError] = React.useState("Error in Generating Otp...");
   const isactive = useMediaQuery("(max-width : 500px)");
 
   const login = "http://localhost:8000/uidai/kyc/";
@@ -90,7 +90,7 @@ function OTP(props) {
           className={classes.logo}
           src="https://iconape.com/wp-content/png_logo_vector/aadhar-logo.png"
         ></img>
-        <br />
+        <br></br>
         <Box
           component="div"
           sx={{
@@ -113,7 +113,7 @@ function OTP(props) {
             OTP has been sent on on your registered aadhar mobile number
           </Typography>
         </Box>
-        <br />
+        <br></br>
         <Box
           component="form"
           autoComplete={false}

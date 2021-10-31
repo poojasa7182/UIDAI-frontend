@@ -10,9 +10,6 @@ import axios from "axios";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useHistory } from "react-router-dom";
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
 const useStyles = makeStyles((theme) => {
   console.log("theme: ", theme);
   return {
@@ -28,6 +25,22 @@ const useStyles = makeStyles((theme) => {
       maxWidth: "100%",
     },
     logo: {
+      width: "25%",
+      marginTop: "-90%",
+      marginLeft: "37.5%",
+    },
+    contain: {
+      background: "rgba(255,255,255,0.4)",
+      backdropFilter: "saturate(180%) blur(10px)",
+      // border:'10px solid black',
+      borderRadius: "50px",
+      paddingTop: "2.5%",
+      paddingBottom: "4%",
+      width: "50vw !important",
+      minWidth: "fit-content !important",
+    },
+    hover: {
+      cursor: "pointer",
       "&:hover": {
         opacity: "0.5 !important",
       },
@@ -163,7 +176,6 @@ function Login(props) {
             onChange={(e) => handleAadharChange(e)}
             error={errorAadhar}
           ></TextField>
-          {console.log(captchaTrxn)}
           <Box
             component="div"
             sx={{
@@ -232,23 +244,6 @@ function Login(props) {
           </Typography>
         </Box>
       </Container>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        <Alert
-          onClose={() => {
-            setOpen(false);
-          }}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {msg}
-        </Alert>
-      </Snackbar>
     </div>
   );
 }

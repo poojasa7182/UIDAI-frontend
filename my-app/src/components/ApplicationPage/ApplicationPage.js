@@ -15,7 +15,7 @@ function ApplicationPage(props) {
   const classes = useStyles();
   return (
     <div className={classes.temp}>
-      <HeaderApp />
+      <HeaderApp {...props} />
       <Application {...props} />
     </div>
   );
