@@ -1,6 +1,6 @@
 import React from "react";
-import OTP from './otp';
-import HeaderLogin from '../LoginPage/header'
+import OTP from "./otp";
+import HeaderLogin from "../LoginPage/header";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => {
@@ -24,4 +24,3 @@ function OTPPage(props) {
 }
 
 export default OTPPage;
-

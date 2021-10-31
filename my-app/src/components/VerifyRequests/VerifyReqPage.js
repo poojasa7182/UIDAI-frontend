@@ -1,25 +1,29 @@
-import HeaderApp from '../DasboardPage/header2'
-import VerifyRequest from './verifyReq'
+import HeaderApp from "../DasboardPage/header2";
+import VerifyRequest from "./verifyReq";
 import React from "react";
 import { makeStyles } from "@mui/styles";
-
+import { Redirect } from "react-router-dom";
 const useStyles = makeStyles((theme) => {
   return {
-        temp:{
-            overflowX:'hidden',
-            overflowY:'hidden'
-        }
+    temp: {
+      overflowX: "hidden",
+      overflowY: "hidden",
+    },
   };
 });
 
-function VerifyReq() {
+function VerifyReq(props) {
   const classes = useStyles();
-  return (
-    <div className={classes.temp}>
-      <HeaderApp />
-      <VerifyRequest />
-    </div>
-  );
+  if (props.loginStatus) {
+    return (
+      <div className={classes.temp}>
+        <HeaderApp {...props} />
+        <VerifyRequest {...props} />
+      </div>
+    );
+  } else {
+    return <Redirect to="/" />;
+  }
 }
 
 export default VerifyReq;
