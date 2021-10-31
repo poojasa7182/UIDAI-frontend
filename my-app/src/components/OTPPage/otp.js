@@ -12,7 +12,6 @@ import "./otp.css";
 import axios from "axios";
 import { useHistory } from "react-router";
 
-
 const useStyles = makeStyles((theme) => ({
   parent: {
     height: "90vh",
@@ -20,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   otp: {
     width: "100%",
@@ -28,63 +27,61 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
   },
   logo: {
-    width: '25%',
-    marginTop: '-90%',
-    marginLeft: '37.5%'
+    width: "25%",
+    marginTop: "-90%",
+    marginLeft: "37.5%",
   },
   contain: {
-    background: 'rgba(255,255,255,0.4)',
-    backdropFilter: 'saturate(180%) blur(10px)',
+    background: "rgba(255,255,255,0.4)",
+    backdropFilter: "saturate(180%) blur(10px)",
     // border:'10px solid black',
-    borderRadius: '50px',
-    paddingTop: '2.5%',
-    paddingBottom: '4%',
-    width: '40vw !important',
-    minWidth: 'fit-content !important'
-  }
+    borderRadius: "50px",
+    paddingTop: "2.5%",
+    paddingBottom: "4%",
+    width: "40vw !important",
+    minWidth: "fit-content !important",
+  },
 }));
 
 function OTP(props) {
   const classes = useStyles();
   const [otp, setOTP] = React.useState("");
-  const [error, setError] = React.useState('')
+  const [error, setError] = React.useState("Error in Generating Otp...");
   const isactive = useMediaQuery("(max-width : 500px)");
 
-  const login = 'http://localhost:8000/uidai/kyc/'
+  const login = "http://localhost:8000/uidai/kyc/";
 
   let width = "400px";
   if (isactive) {
     width = "200px";
   }
 
-  const history = useHistory()
+  const history = useHistory();
   // console.log(props.id, "2")
   const handleChange = (otp) => {
     setOTP(otp);
   };
 
   const loginFunc = (e) => {
-    e.preventDefault()
-    console.log(e)
+    e.preventDefault();
+    console.log(e);
     if (otp.length === 6) {
-      const url = `${login}${otp}/${props.id}/${props.number}`
-      axios.get(url)
-        .then(res => {
-          // if (res.data)
-          console.log((res.data))
-          if (res.data.status === "Fail") {
-            setError(res.data.message)
-            document.getElementById('invalid').style.display = "inline"
-          }
-          else {
-            sessionStorage.setItem("login", "true")
-            sessionStorage.setItem("token", res.data.message)
-            history.push('/app')
-            console.log(res.data)
-          }
-        })
+      const url = `${login}${otp}/${props.id}/${props.number}`;
+      axios.get(url).then((res) => {
+        // if (res.data)
+        console.log(res.data);
+        if (res.data.status === "Fail") {
+          setError(res.data.message);
+          document.getElementById("invalid").style.display = "inline";
+        } else {
+          sessionStorage.setItem("login", "true");
+          sessionStorage.setItem("token", res.data.message);
+          history.push("/app");
+          console.log(res.data);
+        }
+      });
     }
-  }
+  };
 
   return (
     <div className={classes.parent}>
@@ -137,16 +134,29 @@ function OTP(props) {
           />
           {/* <LoadingButton loading /> */}
           <br></br>
-          <Typography component="p" id="invalid" variant="p" textAlign={"center"} sx={{ color: 'red', border: '2px solid red', borderRadius: 28, width: 'fit-content !important', padding: "0.5rem 2rem", display: 'none' }}>
+          <Typography
+            component="p"
+            id="invalid"
+            variant="p"
+            textAlign={"center"}
+            sx={{
+              color: "red",
+              border: "2px solid red",
+              borderRadius: 28,
+              width: "fit-content !important",
+              padding: "0.5rem 2rem",
+              display: "none",
+            }}
+          >
             {error}
           </Typography>
           <Button
             variant="contained"
-            style={{ backgroundColor: "#D32828", width: '50%' }}
+            style={{ backgroundColor: "#D32828", width: "50%" }}
             type="submit"
             sx={{ borderRadius: 28 }}
             onClick={(e) => {
-              loginFunc(e)
+              loginFunc(e);
             }}
             fullWidth
           >

@@ -9,19 +9,20 @@ import {
 import LoginPage from "./components/LoginPage/LoginPage.js";
 import OTPPage from "./components/OTPPage/OTPPage";
 import ApplicationPage from "./components/ApplicationPage/ApplicationPage";
-import RequestPage from "./components/ClientRequestPage/RequestPage"
+import RequestPage from "./components/ClientRequestPage/RequestPage";
 import React from "react";
-import RequestsPage from './components/Requestspage/RequestsPage'
-import VerifyReq from './components/VerifyRequests/VerifyReqPage'
-import FormPage from './components/FormPage/FormPage'
+import RequestsPage from "./components/Requestspage/RequestsPage";
+import VerifyReq from "./components/VerifyRequests/VerifyReqPage";
+import FormPage from "./components/FormPage/FormPage";
 
 function App() {
+  const logInSave = sessionStorage.getItem("login");
 
-  const logInSave = sessionStorage.getItem("login")
-
-  const [loggedIn, setLoggedIn] = React.useState(logInSave === "true" ? true : false);
-  const [otpTrxn, setotpTrxn] = React.useState(null)
-  const [num, setnum] = React.useState(null)
+  const [loggedIn, setLoggedIn] = React.useState(
+    logInSave === "true" ? true : false
+  );
+  const [otpTrxn, setotpTrxn] = React.useState(null);
+  const [num, setnum] = React.useState(null);
 
   return (
     <Router>
@@ -44,35 +45,35 @@ function App() {
         exact
         path="/app"
         render={(props) => {
-          return <ApplicationPage {...props} />;
+          return <ApplicationPage {...props} loginStatus={loggedIn} />;
         }}
       />
       <Route
         exact
         path="/req"
         render={(props) => {
-          return <RequestPage {...props} />;
+          return <RequestPage {...props} loginStatus={loggedIn} />;
         }}
       />
       <Route
         exact
         path="/reqs"
         render={(props) => {
-          return <RequestsPage {...props} />;
+          return <RequestsPage {...props} loginStatus={loggedIn} />;
         }}
       />
       <Route
         exact
         path="/reqs/:id"
         render={(props) => {
-          return <VerifyReq {...props} />;
+          return <VerifyReq {...props} loginStatus={loggedIn} />;
         }}
       />
       <Route
         exact
         path="/form"
         render={(props) => {
-          return <FormPage {...props} />;
+          return <FormPage {...props} loginStatus={loggedIn} />;
         }}
       />
       <Redirect to={loggedIn ? "/app" : "/"} />

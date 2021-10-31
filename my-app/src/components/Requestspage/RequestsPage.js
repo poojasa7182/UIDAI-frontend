@@ -1,24 +1,29 @@
-import HeaderApp from '../DasboardPage/header2'
-import Requests from './requests'
+import HeaderApp from "../DasboardPage/header2";
+import Requests from "./requests";
 import React from "react";
 import { makeStyles } from "@mui/styles";
+import { Redirect } from "react-router";
 
 const useStyles = makeStyles((theme) => {
   return {
-        temp:{
-            overflowX:'hidden'
-        }
+    temp: {
+      overflowX: "hidden",
+    },
   };
 });
 
-function RequestsPage() {
+function RequestsPage(props) {
   const classes = useStyles();
-  return (
-    <div className={classes.temp}>
-      <HeaderApp />
-      <Requests />
-    </div>
-  );
+  if (props.loginStatus) {
+    return (
+      <div className={classes.temp}>
+        <HeaderApp {...props} />
+        <Requests {...props} />
+      </div>
+    );
+  } else {
+    return <Redirect to="/" />;
+  }
 }
 
 export default RequestsPage;

@@ -16,6 +16,7 @@ import Divider from "@mui/material/Divider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Badge } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
 const useStyles = makeStyles((theme) => ({
   item: {
     minHeight: "100%",
@@ -42,14 +43,14 @@ const useStyles = makeStyles((theme) => ({
 
 function Application(props) {
   const classes = useStyles();
-  const [user,setUser] = React.useState("Paritosh Kabra");
+  const [user, setUser] = React.useState("Paritosh Kabra");
   const [introducer, setintroducer] = React.useState("Landlord singh");
-  const reqStatus  = 1;
-  const aadhar_me  = "123443211234";
+  const reqStatus = 1;
+  const aadhar_me = "123443211234";
   const aadhar_intro = "98766789876";
   const isActive = useMediaQuery("(max-width : 700px)");
   const address = [{ f: "val1" }, { f: "val2" }, { f: "val3" }, { f: "val4" }];
-
+  const [open, setOpen] = React.useState(props.location.openSnackbar);
   return (
     // sx={}
     //{ height: !isActive ? "100vh" : "auto" }
@@ -58,13 +59,13 @@ function Application(props) {
         sx={{
           // height: "50%",
           // // width:"",
-          padding: '4rem',
+          padding: "4rem",
           display: "flex",
           flexDirection: !isActive ? "row" : "column",
           alignItems: "center",
           border: "2px solid black",
           borderRadius: "40px",
-          marginTop:'2%'
+          marginTop: "2%",
         }}
       >
         <Container
@@ -79,7 +80,11 @@ function Application(props) {
             src="https://cdn.pixabay.com/photo/2021/09/27/14/39/paris-6661136__480.jpg"
             alt=""
             className={classes.image}
-            style={{ width: isActive ? "100%" : "75%", height: isActive ? "150px" : "", marginBottom: isActive ? '10%':'' }}
+            style={{
+              width: isActive ? "100%" : "75%",
+              height: isActive ? "150px" : "",
+              marginBottom: isActive ? "10%" : "",
+            }}
           />
         </Container>
         <Container
@@ -196,7 +201,6 @@ function Application(props) {
           className={classes.item}
           style={{ overflow: "auto", overflowX: "hidden" }}
         >
-     
           <Box sx={{ minWidth: 275 }}>
             <div>
               <Typography
@@ -211,8 +215,17 @@ function Application(props) {
                 sx={{ fontSize: "18px", fontWeight: "bold" }}
                 component="span"
               >
-                {(introducer!='')?(<span>{introducer} <span style={{ fontSize: "24px" }}><br></br></span>{" "}</span>):('')}
-                
+                {introducer != "" ? (
+                  <span>
+                    {introducer}
+                    <span style={{ fontSize: "24px" }}>
+                      <br />
+                    </span>
+                  </span>
+                ) : (
+                  ""
+                )}
+
                 <span style={{ fontSize: "16px" }}>Aadhar Number:</span>
               </Typography>
               <Typography sx={{ ml: 0.5 }} component="span">
@@ -284,30 +297,37 @@ function Application(props) {
         </Container>
         <Container>
           <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                paddingTop: "10%",
-                width: "fit-content",
-              }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingTop: "10%",
+              width: "fit-content",
+            }}
+          >
+            <Button
+              variant="outlined"
+              color="error"
+              // startIcon={<DeleteIcon />}
+              sx={{ mt: 1, borderRadius: 2 }}
+              fullWidth
             >
-             <Button
-                variant="outlined"
-                color="error"
-                // startIcon={<DeleteIcon />}
-                sx={{ mt: 1, borderRadius: 2 }}
-                fullWidth
-              >
-                cancel Request
-              </Button>
-              </div>
+              cancel Request
+            </Button>
+          </div>
         </Container>
       </Container>
-      {/* </Badge> */}
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={() => {
+          setOpen(false);
+        }}
+        message={props.location.snackMsg}
+      />
+      {/* Badge */}
     </Container>
-    
   );
 }
 
